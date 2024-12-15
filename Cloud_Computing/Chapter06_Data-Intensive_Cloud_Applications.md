@@ -37,8 +37,14 @@ A 1/ A 2 comprised of the same IT resources as Pool A, but in different quantiti
 - Redundant deployments of cloud services with load balancing
 - Implementation mechanisms
     - Usage Monitor: monitoring service instances and IT resource consumption at runtime
-    - Resource Cluster: active active cluster groups incorporated to balance workloads across different members of the cluster
+    - Resource Cluster: active-active cluster groups incorporated to balance workloads across different members of the cluster
     - Replication: generate cloud service in support of load balancing requirements
+
+An active-active cluster refers to a setup in high availability (HA) systems where multiple nodes or servers in a cluster are simultaneously active and processing workloads. This configuration ensures efficient resource utilization, scalability, and fault tolerance.
+- **Improved Performance**: Concurrent processing increases throughput.
+- **Fault Tolerance**: Redundancy ensures continuous operation despite individual node failures.
+- **Optimal Resource Utilization**: All nodes contribute actively, reducing idle resources.
+- **Scalability**: Easier to expand by adding more nodes.
 
 ### 1.1.4 Cloud Bursting Architecture
 
@@ -79,9 +85,7 @@ virtualization infrastructure management (VIM)
 ![](image/Pasted%20image%2020241212103154.png)
 
 
-
 #### 1.1.5.2 Virtual Server Clustering Architecture
-
 
 - Deployment of virtual server clusters on physical hosts running hypervisors
     - Virtual servers instantiated on top of separate physical hosts running hypervisors
@@ -92,10 +96,7 @@ virtualization infrastructure management (VIM)
 ![](image/Pasted%20image%2020241212103506.png)
 
 
-
-
 ### 1.1.6 Nondisruptive Service Relocation Architecture
-
 
 - Cloud service can become unavailable for many reasons, for example 
     - runtime usage demands exceed processing capacity
@@ -242,5 +243,53 @@ Auto Scaling with EMR
 - Example: scale up number of workers when less than 15% of memory available for a five minute period
 ![](image/Pasted%20image%2020241212112515.png)
 
+## 1.5 Google Cloud 
 
+- Projects in GCP used to allocate all resources as management entity of the services
+    - Characterized by parameters such as permissions, settings, and other meta data for applications
+    - Communication between resources in a project is allowed
+    - Access to resources used by other projects using a shared VPC or Network Peering
+    - Unique project ID can never be reused for other projects even if the initial project is deleted
+    - Resource names in the same project must be unique
+    - Each project is assigned to a billing account
+
+- Modes to access GCP services
+    - Google Cloud Console: web based user interface
+    - gcloud command line tool: interacting with GCP services using the command line
+    - Cloud SDK: set of tools for developing and deploying applications to GCP
+    - Google Cloud API: access GCP services programmatically
+    - Cloud Marketplace: pre configured and ready to use solutions be to integrated and managed
+    - Cloud Shell: command line interface for running GCP commands directly in a web browser
+
+
+- Compute Services
+    - Compute Engine (GCE): Infrastructure as a Service (IaaS) run VMs in Google’s data centers
+    - Kubernetes Engine (GKE): Managed Kubernetes service for deploying, managing, and scaling containerized applications
+- Storage Services
+    - Cloud Storage: Scalable and durable object storage
+    - Cloud SQL: Fully managed relational DB service for MySQL, PostgreSQL, SQL Server
+    - Cloud Spanner: Globally distributed, strongly consistent, horizontally scalable DB service
+- Database Services
+    - Bigtable: Fully managed, scalable NoSQL DB for large analytical and operational workloads
+    - Firestore : Serverless, NoSQL document database for web, mobile, and server development
+- Developer Tools
+    - Cloud Build: CI/CD platform
+    - Cloud Source Repositories: Private Git repositories hosted on GCP
+- Networking Services
+    - Virtual Private Cloud: Networking service for creating and managing virtual private networks
+    - Cloud Load Balancing, Cloud DNS: Automated, scalable, distributed load balancing / DNS service
+- Big Data and Analytics
+    - BigQuery : Serverless data warehouse for fast SQL queries on large datasets
+    - Dataflow: Stream and batch processing service for real time data processing
+    - Dataproc : Managed Apache Spark and Hadoop service for running big data analytics
+    - AI: Services for building, testing, deploying ML models (Vision AI, NLP with pre trained models)
+- Identity and Security
+    - Identity and Access Management: Security and access control for permissions and policies
+    - Cloud Identity Aware Proxy: Identity based access control for applications running on GCP
+
+
+![](image/Pasted%20image%2020241212184120.png)
+
+
+![](image/Pasted%20image%2020241212184130.png)
 

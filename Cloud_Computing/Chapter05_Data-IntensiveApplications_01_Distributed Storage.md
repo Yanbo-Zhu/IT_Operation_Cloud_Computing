@@ -11,8 +11,8 @@ Analytics Cluster Setup
 ![](image/Pasted%20image%2020241127122517.png)
 
 
+---
 
-# 1 Distributed Storage
 
 Distributed file systems and databases (e.g. on GFS) typically running on commodity clusters
 Fault tolerance and parallel access through replication of data blocks
@@ -21,7 +21,7 @@ Fault tolerance and parallel access through replication of data blocks
 ![](image/Pasted%20image%2020241127122736.png)
 
 
-## 1.1 Google File System[
+# 1 Google File System
 
 GFS designed to meet the following criteria
 - Scalability: Must store hundreds of terabytes and support for large commodity clusters (1000s of servers)
@@ -34,7 +34,7 @@ Google‘s workload characteristics
 - Most files are written only once, then read sequentially
 
 
-### 1.1.1 Google File System Design
+## 1.1 Google File System Design
 
 GFS is not a POSIX-compliant file system
 - Limited support for random writes (expected to happen rarely), data can be efficiently appended instead
@@ -45,7 +45,7 @@ GFS is not a POSIX-compliant file system
 
 
 
-### 1.1.2 Google File System Architecture
+## 1.2 Google File System Architecture
 
 ● GFS follows master-worker architecture
 ● Master stores metadata
@@ -73,7 +73,7 @@ GFS is not a POSIX-compliant file system
 
 
 
-### 1.1.3 Reading File X From GFS
+## 1.3 Reading File X From GFS
 
 Let’s assume client wants to read X starting at MB 100
 1. Client knows chunk size, converts offset to chunk index
@@ -86,9 +86,9 @@ Note: Master not involved in actual data transfer
 
 
 
-### 1.1.4 Design Considerations for the GFS Master
+## 1.4 Design Considerations for the GFS Master
 
-Master 本身不存储 file 的 content , 只存储 file 怎么被分割的 和 个个 chunk 和 chunk server 的信息 (metadata )
+GFS Master 本身不存储 file 的 content , 只存储 file 怎么被分割的 和 个个 chunk 和 chunk server 的信息 (metadata )
 
 Central master has global knowledge of the file system
 - Simplifies design and reduces response times
@@ -100,7 +100,7 @@ Chunk size is an important parameter of GFS as it determines
 metadata that fits into memory
 metadata exchanged between master and client
 
-#### 1.1.4.1 What Happens When the Master Fails?
+### 1.4.1 What Happens When the Master Fails?
 
 Metadata is crucial to the functionality of the FS
 所以 metadata 会被自动 replicated to remote machine 
@@ -116,7 +116,7 @@ Namespace/file-to-chunk mappings are written to log
 
 Replica locations are requested from chunk servers when the master (re-)starts or new chunk server joins
 
-#### 1.1.4.2 Operation Log
+### 1.4.2 Operation Log
 
 Serves as logical timeline that defines the order of concurrent operations
 - Files and chunks (as well as their version) are all uniquely and eternally identified by their logical creation times
@@ -127,7 +127,7 @@ Serves as logical timeline that defines the order of concurrent operations
 ==When log grows beyond certain size the master creates snapshot of metadata to improve startup times==
 
 
-### 1.1.5 GFS Leases and Mutation Order
+## 1.5 GFS Leases and Mutation Order
 
 Mutation 是 write/append 操作
 
@@ -159,7 +159,7 @@ Mutation 是 write/append 操作
 7. Ack. to client
 
 
-### 1.1.6 GFS Support for Atomic Appends
+## 1.6 GFS Support for Atomic Appends
 
 Append data  就是 在 chunk3 的某个位置 上面加数据,  这个位置有 Offset 来表示
 
@@ -182,7 +182,7 @@ Append is writing to a file at specific offset
     - Replicas are not guaranteed to be bitwise identical!
 - Operation guarantees that data is appended at least once
 
-## 1.2 Hadoop Distributed File System (HDFS)
+# 2 Hadoop Distributed File System (HDFS)
 
 - Distributed filesystem inspired by GFS: All data is stored in blocks, replicated on multiple nodes
 - Each node is a Linux compute node with hard disks
@@ -204,10 +204,9 @@ Example systems working on top of HDFS
 - Spark and Flink, dataflow systems
 
 
-### 1.2.1 HDFS Architecture
+### 2.1.1 HDFS Architecture
 
 ![](image/Pasted%20image%2020241127132112.png)
-
 
 
 粉色的为 node, 绿色为 block 
@@ -221,6 +220,4 @@ Rules
 - Replica writes are done in a pipelined fashion and reads are done from the nearest replica to optimize network usage
 - Replication and block placement: file’s replication factor can be changed dynamically (default is 3, 默认 同一个block 有三个 replicas in 3 different node )
 - Block placement is rack-aware (by default, when racks are configured)
-
-
 
