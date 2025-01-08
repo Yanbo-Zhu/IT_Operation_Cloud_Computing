@@ -659,27 +659,79 @@ Beispiel zu Primary Copy Verfahren
 
 
 ## 4.3 Voting-Verfahren
-•
-Vor jedem Zugriff auf ein repliziertes Datum müssen ausreichend viele Stimmen
-votes ) gesammelt werden
-•
+
+Vor jedem Zugriff auf ein repliziertes Datum müssen ausreichend viele Stimmen (votes ) gesammelt werden
+
 Mehrheits Votum
-
-Die Transaktion muss die Mehrheit der Repliken des benötigten Objekts sperren
-(Sperre =
-
-Beim Lesen wird eine Mehrheit der Repliken mit Sperren belegt das Objekt kann nicht
-von einer anderen Transaktion zwischenzeitlich verändert werden
-
-Mindestens ein Replikat befindet sich auf dem aktuellen Stand
-
-Aktualität der Replikate wird durch einen Änderungszähler festgestellt
-•
+- Die Transaktion muss die Mehrheit der Repliken des benötigten Objekts sperren (Sperre = Stimme)
+- Beim Lesen wird eine Mehrheit der Repliken mit Sperren belegt ->  das Objekt kann nicht von einer anderen Transaktion zwischenzeitlich verändert werden
+- Mindestens ein Replikat befindet sich auf dem aktuellen Stand
+- Aktualität der Replikate wird durch einen Änderungszähler festgestellt
+
 Vorteil: Objekte auch bei mehreren Knotenausfällen referenzierbar
-•
 Nachteil: mehrere Nachrichten pro Zugriff zur Sicherstellung der Mehrheit
 
+Gewichtetes Voting (Quorum 多数派 Consensus)
+- Jedem Replikat wird ein bestimmtes Gewicht (Stimmenanzahl) zugeordnet
+- Zum Lesen bzw. Schreiben eines Datums wird eine bestimmte Anzahl von Stimmen (Lese Quorum bzw. Schreib Quorum) gesammelt  必须达到一定数量的 stimme 才能开始 lese 或者 schreiben 操作 
+    - r = Lese Quorum
+    - w = Schreib Quorum
+- Garantien für konsistente Datenverarbeitung (bei insgesamt v Stimmen):
+    - w>v/2 garantiert: kein Objekt gleichzeitig von mehr als 1 Transaktion geändert
+    - r+x >v verhindert: ein Objekt kann nicht gleichzeitig gelesen und geschrieben werden
+- Durch die Gewichte können sowohl die Kosten für Schreib/Lese Zugriffe als auch die Verfügbarkeit bestimmt werden
+    - Je kleiner r bzw. w , desto schneller sind die Lese bzw. Schreibzugriffe\
+    - Erhöhte Verfügbarkeit, da einige Rechner ausfallen dürfen
+    - Lesebevorzugung geht auf Kosten der Schreiboperationen und umgekehrt
 
+Beispiel zu Quorum Verfahren
+- Objekt A sei an vier Rechnern R1 bis R4 repliziert
+- Stimmenverteilung <2,1,1,1>, d.h. R1 hat 2 Stimmen
+- Wählt man r = 3 und w = 3, so sind 2 oder 3 Rechner bei jeder Transaktion involviert
+    - Durch Bevorzugung von R1 ist ein schnellerer Zugriff auf die Daten von R1 gewährleistet
+    - Zugriff ist auch nach Auswahl jedes der Rechner möglich. Wenn R1 intakt 完好无损的 bleibt dürfen auch zwei Rechner ausfallen
+- Lesezugriffe werden gegenüber von Schreibzugriffen bevorzugt, wenn z.B. r=2 und w=4 gilt
+    - Lesezugriffe können auf R1 lokal ausgeführt werden
+    - Bei Schreibzugriffen sind allerdings mindestens 3 Rechner beteiligt. Nach Ausfall von R1 ist das Objekt nicht mehr modifizierbar
+
+Vor und Nachteile des Quorum Verfahrens
+- Durch spezielle Parameterwahl lassen sich das Mehrheits und das ROWA Verfahren sowie eines der Primary Copy Protokolle nachbilden
+    - Mehrheitsverfahren: Jedes Replikat hat das gleiche Gewicht (1 Stimme)
+    - ROWA Verfahren: Jedes Replikat hat eine Stimme. Ferner ist r =1 und w =v=Anzahl Replikate
+    - Primary Copy : 
+        - Primärkopie bekommt 1 Stimme, alle anderen Replikate bekommen keine Stimme und r = w =1 
+        - Lesezugriffe müssen an Primärkopie gerichtet werden, Repliken ohne Stimme werden ohne Konsistenzzusicherung genutzt
+- Nachteil: geeignete Wahl der Parameter komplex, insbesondere wenn diese ohne oder mit geringer Beteiligung des Systemverwalters erfolgen sollen
 
 
 # 5 Backup
+
+- Backup: Datensicherung auf redundante Speichermedien
+- Restore: Wiederherstellung verlorener/veränderter Daten anhand der Backup Kopien nach
+    - Festplattencrash und anderen Katastrophen
+    - Datenverlust nach Fehlbedienung
+- Backupmedien sollen vor Gefahren wie Feuer, Wasserschäden, Erdbeben, Raub, usw. geschützt werden
+
+
+Backup- Arten:
+vollständig vs. inkrementell
+- Vollständige Sicherung: Alle Daten werden auf Backupmedium kopiert
+- Inkrementelle Sicherung
+    - Sicherung aller Daten, die sich seit der letzten Sicherung geändert haben: Letzte Änderung kann inkrementell oder vollständig sein
+    - Wiederherstellung setzt Verfügbarkeit der letzten vollständigen Sicherung und ALLER inkrementellen Sicherungen voraus: Datenverlust, falls auch nur eine inkrementelle Sicherung fehlt
+- Üblich: Wöchentliche vollständige Sicherung (etwa Wochenende) und tägliches inkrementelles Backup
+    - Sicherung eines Zyklus (etwa 3 4 Wochen) auf unterschiedlichen Medien
+    - Von Zeit zu Zeit  -> Vollständige Sicherung, die nicht überschrieben wird, d.h. ein bestimmter System und Datenzustand wird konserviert
+
+Beispiel Backup Policy
+- Backupklassen definieren verschiedene Wertigkeiten von Daten
+    - Typ 1: 3 Versionen, 7 Tage, Aufbewahrung nach Löschung: 1 Version, 30 Tage
+    - Typ 2: 7 Versionen, 14 Tage, Aufbewahrung: 1 Version, 90 Tage
+    - Typ 3: 30 Versionen, 30 Tage, Aufbewahrung: 5 Versionen, 365 Tage
+- Bei Typ 1
+    - Maximal 3 Versionen innerhalb von 7 Tagen
+        - Sind 3 Versionen vorhanden und Dateiänderung innerhalb des 7 Tage Intervalls, so wird die älteste Version durch die neue Kopie im Backup ersetzt
+    - Automatischer Abbau von Versionen, wenn keine Veränderungen
+        - Nach 8 Tagen sind 2 Versionen vorhanden. Nach weiteren 8 Tagen nur noch eine
+        - Solange Datei nicht verändert oder gelöscht, verbleibt eine Version im Backup
+        - Gelöscht Datei kann noch 30 Tage zurückgeholt werden, danach endgültige Löschung
