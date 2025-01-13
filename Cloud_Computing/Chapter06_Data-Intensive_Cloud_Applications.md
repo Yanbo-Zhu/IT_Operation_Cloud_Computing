@@ -1,4 +1,11 @@
 
+keypoint
+Cloud native and microservices are currently predominant architecture style
+Several large cloud providers dominate the commercial market
+Cloud migration transforms the on site IT infrastructures
+Designing microservice architecture is an iterative process to discover regarding interaction, size of services, dealing with transactions
+
+
 # 1 Cloud Architectures
 
 ## 1.1 Basis
@@ -139,7 +146,7 @@ Example
 ![](image/Pasted%20image%2020241212104957.png)
 
 
-## 1.2 Cloud Platforms: IaaS vs. PaaS
+# 2 Cloud Platforms: IaaS vs. PaaS
 
 PaaS offers higher abstraction level compared to IaaS
 - Less development/maintenance effort
@@ -159,7 +166,7 @@ Service usage can be charged
 Enables interesting scenarios for consumers
 - Deployed applications can have very low operational costs until they become popular
 
-## 1.3 Azure 
+## 2.1 Azure 
 
 
 Azure Programming Model (1/4)
@@ -182,7 +189,7 @@ Example: Azure application according to the programming model
 ![](image/Pasted%20image%2020241212110929.png)
 
 
-## 1.4 AWS
+## 2.2 AWS
 
 Sample Service: Elastic Map/Reduce (EMR)
 
@@ -243,7 +250,7 @@ Auto Scaling with EMR
 - Example: scale up number of workers when less than 15% of memory available for a five minute period
 ![](image/Pasted%20image%2020241212112515.png)
 
-## 1.5 Google Cloud 
+## 2.3 Google Cloud 
 
 - Projects in GCP used to allocate all resources as management entity of the services
     - Characterized by parameters such as permissions, settings, and other meta data for applications
@@ -292,4 +299,253 @@ Auto Scaling with EMR
 
 
 ![](image/Pasted%20image%2020241212184130.png)
+
+
+# 3 Cloud Migration
+
+
+## 3.1 Why Migrating Systems into the Cloud?
+
+Organizations migrate infrastructures and applications from own data centers (on premise) to cloud providers (off premise) expecting some benefits
+- Optimized costs: savings in resource, maintenance, and real estate costs
+- Flexibility and scalability: pay per use but also cover demand spikes
+- Enhanced security: public clouds are more valuable targets, but have SOTA built in security features and specialized cloud security tools
+- Compliance offerings to meet requirements needed in highly regulated industries like finance, healthcare, and government
+- Provider responsible for backup , recovery, and failover
+- Simplified management and monitoring of on premises data center and cloud resources (single Screen)
+
+## 3.2 6Rs of Cloud Migration
+
+- Framework by AWS for organizations to shift workloads to cloud platforms
+- Each option with different balance of complexity, cost, and cloud optimization
+    - Rehost (Lift and Shift): straightforward migrating apps and data with minimal changes
+    - Re-platform (Lift, Tinker, and Shift): apps modified partly for exploiting cloud capabilities, but no re-architecture
+    - Rearchitect, Refactoring (Redesign for Cloud): significant modifications to fully exploit the advantages of cloud native technologies and services
+    - Repurchase (Drop and Shop): moving to different product (cloud native or SaaS)
+    - Retire: Removing no longer useful IT assets, migrating only the necessary systems
+    - Retain (Keep as It Is): no migration of workloads based on specific business, technical, or regulatory factors (e.g. data privacy)
+
+![](image/Pasted%20image%2020250112222345.png)
+
+
+---
+
+Retain & Optimize
+- Retention: viable option when applications
+    - tightly bound to legacy hardware, cannot be easily moved or
+    - regulatory and compliance requirements not yet addressed by cloud environments
+    - Pros: Compliance, stability, cost management (avoids unnecessary migration costs for systems that are not cloud ready or beneficial to move)
+    - Cons: Missed opportunities, complexity of a separate environment to manage
+- Repurchase: existing outdated applications replaced by cloud native solutions
+    - reducing operational burden of maintaining legacy systems
+- Retire: Applications outdated, redundant, or no longer deliver business value
+    - Identifying such assets is challenging: Comprehensive inventory of all IT assets / applications and usage statistics analysis to identify rarely / never used assets
+
+Lift & Shift
+- Mostly implemented as rehosting → organizations move existing on premises applications to cloud without redesigning the architecture
+    - Quick migration (time constraints/cost pressures) and fast scaling operations rapidly without immediate concern for cloud native features
+    - Pros: Fast, cost effective (avoiding major redesigns), simple (reduces complexity in migration process)
+    - Cons: Poor optimization, technical debt (keep legacy issues and inefficiencies)
+- How to lift & shift
+    - Assessment: which workloads to shift? Compatible with provider's environment?
+    - Planning: Migration plan, resource allocation, scheduling, risk mitigation strategies
+    - Preparation, migration: automation tools to be used for migration and possible rollback?
+    - Testing: Ensure functionality and performance match expectations
+    - Optimizing resources to take advantage of the cloud's scalability and elasticity
+
+Re-architect (Re Factor)
+- Re-building applications needing scalability, resilience, or features from cloud native architecture → Often used for transforming businesses through the cloud
+    - Pros: Full optimization (cloud native features for performance, scalability, resilience), long term savings, innovation (e.g. microservices, serverless)
+    - Cons: High initial cost (time, resources, expertise), complexity of restructuring and transition risks, potential for greater impact on business downtimes
+- How to re architect?
+    - Assessment: In depth analysis to determine feasibility and requirements for rearchitecting
+    - Strategic planning: Roadmap for transition (timelines, expected benefits, resource allocation)
+    - Rebuilding architecture: cloud native practices, transforming monolithic in microservices
+    - Implementation: Develop and deploy rearchitected application using CI/CD pipelines
+    - Testing and iterative optimization
+
+## 3.3 cloud native architecture
+
+- What is a cloud native architecture?
+    - Complex systems decomposed into services that can be independently tested and deployed on containerized runtime (microservice or service oriented architecture)
+    - Applications use standard platform provided services such as DBMS, blob storage, messaging, CDN, SSL, etc.
+    - Standardized cloud platform automates operation (deployment, autoscaling, configuration, monitoring, alerting) → access on demand by all development teams
+    - Standardized OS, middleware, language specific stacks provided to developers
+    - Cross functional teams responsible for entire software delivery life cycle of each service
+
+
+Cloud native: Principles and practices
+- Microservices architecture principles and practices recommended by Google
+    - Every service with own DB schema to remove dependencies
+    - Services communicate through public APIs only: no “back door” access, or services talking directly to other services’ databases
+    - Services responsible for backwards client compatibility: Team building and operating a service makes sure that updates don’t break the service
+    - Standard way to run services: Developers can run any subset of production services on own workstations with one command → easily test and debug locally
+    - Observability: Teams have access to tools/data to trace, understand, diagnose infrastructure problems in production, including interactions between services
+    - Service level objectives: expectations on how the service will perform, mitigation plans for service interruption
+
+Cloud native: Local and remote development loops
+- Local development: Speed up an inner development loop and provide the developers with sets of tools to get fast feedback on the impact of local code changes
+- Remote Development: Pull request (PR) kicks off remote development loop reduce the time to validate and test the PR via CI, scan for vulnerabilities, and performing other supporting activities
+![](image/Pasted%20image%2020250112224134.png)
+
+
+
+Cloud native architecture elements
+![](image/Pasted%20image%2020250112224355.png)
+
+
+Operational Excellence
+- Automate everything
+    - Infrastructure as Code (IaC): minimizing errors during environment provisioning and deployment by using code artifacts (Azure Resource Manager, AWS CloudFormation, Terraform, etc
+- Monitor everything
+    - Information about application and environment behavior, usage patterns
+    - Challenging: consistent monitoring across entire stack
+- Document everything
+    - Cloud native applications built by many teams → documentation crucial, as every member must understand how to use each services, how environment is defined and provisioned
+    - Documentation should be done automatically and not manually
+- Incremental changes
+    - Changes to environment and application should be incremental and reversible
+- Design for failure
+    - How to design fault tolerant applications and which processes need to activated in case of failure
+
+## 3.4 Fundamentals of Cloud Native Applications
+
+Difference between cloud native applications and monolithic application
+- Handling of state (session state, application and configuration data, etc
+- Orchestration of Services
+- Reaction to failures
+
+
+Stateful vs. Stateless
+- Handling of state (session state, application and configuration data, etc.)
+    - Traditional applications stateful (application state commonly stored in compute instance)
+    - Cloud native: stateless by nature → state externalized
+- Example
+    1. Client sends request to application
+    2. LB routes request to Application Instance 0, which reads and writes the state to external state store
+    3. Instance 0 failure → LB sends the requests from client to Application Instance 2
+    4. Instance 2 reads state for the initial request from the external state store → client not affected by failure
+
+![](image/Pasted%20image%2020250112224741.png)
+
+
+Event-driven patterns for communication
+- Organizing requests across loosely coupled services
+- Each service isolated, autonomous, responsible for managing its own state
+- Example
+    1. Client request to application routed through LB to SvcA , which requests data from messaging system
+    2. SvcB independently sends its data to eventing system
+    3. SvcC independently sends its data to eventing system
+    4. SvcA picks up the data from the eventing system and sends it back to the client
+
+![](image/Pasted%20image%2020250112225248.png)
+
+
+
+Handling Failures
+- Traditional architectures try to minimize failures using redundancy, e.g. database clustering
+- Cloud native architectures expect failures and implement mechanisms to deal with them, whereas
+- Small services and stateless means
+    - Quick recovery after failure (restart) or
+    - Scale out in case of performance issues
+    - Fast live migration in case of failed platform
+    - Roll back, if update malfunctioning
+
+## 3.5 Microservice Architecture
+
+12 factor methodology for cloud native
+![](image/Pasted%20image%2020250112214213.png)
+
+
+![](image/Pasted%20image%2020250112214227.png)
+
+
+Microservice Architecture
+- Distributed, decoupled: each service in own container / VM
+    - Extreme decoupling “wastes” resources, affects performance (many network calls)
+- Bounded context
+    - Each service models a domain or workflow
+    - Each service includes everything necessary to operate within the application including classes, other subcomponents, and database schemas
+- “Microservice” is a label , not a requirement (micro)
+    - Architects struggle to find the correct granularity and make the mistake of too small services, which require (too) many communication links between the services
+    - finde the best balance between size of service and the network 
+
+Microservices: How to find the right size (Granularity)
+- Ideas, what to use to determine the granularity:
+    - Purpose: Ideally, each microservice is functionally cohesive 团结的，有凝聚力的, contributing one significant behavior on behalf of the overall application.
+- Transactions: entities that need to cooperate in a transaction build a good service boundary
+    - transactions cause issues in distributed architectures → design the system to avoid
+- Choreography编舞: set of services with excellent domain isolation yet extensive communication needs
+    - bundling these services into larger service to avoid overhead may be a better design choice
+- Data isolation: Using relational databases to unify values within a system (single source of truth) is no great option when distributing data
+    - Identifying one domain as the source of truth for some fact and coordinating with it to retrieve values or using database replication or caching to distribute information
+- Iteration is the only way to ensure good service design
+    - Architects rarely discover perfect granularity, dependencies, and communication overhead on first pass → Iterating over options gives a good chance for refining the design
+
+
+---
+Topology of the microservices architecture style
+![](image/Pasted%20image%2020250112214333.png)
+
+---
+
+Operational Reuse
+- Microservices prefer duplication to coupling
+- How architects handle architecture parts that benefit from coupling (e.g. monitoring, logging, …)?
+- Challenges
+    - How can be ensured that each service team implements monitoring?
+    - Who is responsible for upgrading to the new version of monitoring tool?
+- Sidecar pattern in microservices
+    - Handles all operational concerns that benefit from coupling
+    - Shared infrastructure team updates sidecar → each microservices receives that new functionality
+![](image/Pasted%20image%2020250112215804.png)
+
+---
+
+Service Plane and Service Mash
+- Sidecar content (included services) is known to all teams
+- Each sidecar wires into service plane, which forms consistent interface to each service
+- Service mesh allows unified control across the architecture for logging and monitoring and allows developers holistic access to services
+- Green tiles: application, blau: proxy 
+
+![](image/Pasted%20image%2020250112215901.png)
+
+
+
+---
+
+Choreography
+- No central (permanent) mediator 
+    - First service called becomes a mediator 中介物 and coordinates the other services (front controller pattern) 
+    - added complexity to every service
+- Trade offs
+    - Pros: Preserving highly decoupled philosophy of the architecture style
+    - Cons: Common problems like error handling and coordination become more complex to handle
+
+![](image/Pasted%20image%2020250112221137.png)
+
+---
+
+Orchestration
+- Dedicated, permanent service responsible to coordinate the call and get all information for particular customer
+- Trade offs
+    - Pros: Less coordination overhead
+    - Cons: Breaking distribution as domain workflows are inherently 固有地 coupled
+
+![](image/Pasted%20image%2020250112221354.png)
+
+---
+
+`Saga(*) Pattern`
+The term "SAGA" does not stand for an acronym but is borrowed from storytelling, symbolizing a sequence of events that make up a complete narrative.
+- Don’t do transactions in microservices → fix granularity instead!
+- If not possible other way ->  saga pattern 
+    - Sequence of local transactions, where each local transaction updates DB and publishes a message to trigger next local transaction
+    - Local transaction fails → saga executes compensating transactions to undo changes made by preceding local transactions
+- Typical implementation
+    - Each request enters a pending state until the mediator indicates overall success
+    - Complex design for asynchronous requests 
+    - Significant coordination traffic at network level
+
+![](image/Pasted%20image%2020250112221844.png)
 
